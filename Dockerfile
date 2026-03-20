@@ -1,22 +1,13 @@
-FROM node:18-slim
-
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+FROM node:18
 
 WORKDIR /app
 
-# Copiar apenas package.json primeiro (melhor para cache)
 COPY package*.json ./
-
-# Instalar dependências
 RUN npm install
 
-# Copiar o resto do código
 COPY . .
 
-# Criar diretório para gravações
-RUN mkdir -p recordings
+# EXPOR a porta (importante para o Railway)
+EXPOSE 3000
 
-# Comando correto para iniciar
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
